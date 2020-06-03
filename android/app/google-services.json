@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "128279698562",
+    "firebase_url": "https://wallie-6050e.firebaseio.com",
+    "project_id": "wallie-6050e",
+    "storage_bucket": "wallie-6050e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:128279698562:android:ad1f45607b7aa8ecfb689b",
+        "android_client_info": {
+          "package_name": "com.ds24.wallie"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "128279698562-6fj8lvah2guom3hrmu7lsmpj9asnmmt4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ds24.wallie",
+            "certificate_hash": "30d78f72c5edf249e1aff3d7b37a3c5eebf2b1ea"
+          }
+        },
+        {
+          "client_id": "128279698562-3iq91t163bn2q0s22eq9o37n9p4k26ks.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwis1entB_yagNAeSTjlM0kOTamYiLlOk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "128279698562-3iq91t163bn2q0s22eq9o37n9p4k26ks.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
