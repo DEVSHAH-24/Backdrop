@@ -11,7 +11,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedPageIndex = 0;
-
+ // String appBarTitle;
   List _pages = [ExplorePage(),FavoritePage(),AccountPage()];
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,8 @@ class _HomePageState extends State<HomePage> {
           onPressed: () =>
               Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen())),
         ),
-        title: Text('Home page'),
+        centerTitle: true,
+        title: Text('Backdrop'),
       ),
       body: _pages[_selectedPageIndex],
       bottomNavigationBar: BottomNavigationBar(
