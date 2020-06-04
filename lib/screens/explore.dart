@@ -23,13 +23,14 @@ class _ExplorePageState extends State<ExplorePage> {
             SizedBox(
               height: 20,
             ),
+            Align(child: Container(padding: EdgeInsets.only(left: 15),child: Text('Explore',style: TextStyle(color: Colors.blue[100],fontSize: 35),)),alignment: Alignment.centerLeft,),
             StaggeredGridView.countBuilder(
               crossAxisCount: 2,
               shrinkWrap: true,
               physics: NeverScrollableScrollPhysics(),
               staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
               itemCount: images.length,
-              mainAxisSpacing: 20,
+              mainAxisSpacing: 15,
               crossAxisSpacing: 20,
               padding: EdgeInsets.all(15),
               itemBuilder: (context, index) {

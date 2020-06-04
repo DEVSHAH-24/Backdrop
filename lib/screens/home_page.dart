@@ -17,12 +17,12 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () =>
               Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen())),
         ),
-        centerTitle: true,
         title: Text('Backdrop'),
       ),
       body: _pages[_selectedPageIndex],
@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
           });
 
         },
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.grey[900],
         items: [
           BottomNavigationBarItem(
 

@@ -15,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "128279698562-6fj8lvah2guom3hrmu7lsmpj9asnmmt4.apps.googleusercontent.com",
+          "client_id": "128279698562-megfb79rj3dvv73857apj03vfo7m22lg.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.ds24.wallie",
-            "certificate_hash": "30d78f72c5edf249e1aff3d7b37a3c5eebf2b1ea"
+            "certificate_hash": "c9d436f18becf9b9ff8e4d05c51e89449e173661"
           }
         },
         {
