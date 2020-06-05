@@ -4,6 +4,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:wallie/rounded_button.dart';
 import 'package:cache_image/cache_image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:wallie/screens/view_wallpaper.dart';
 
 class AccountPage extends StatefulWidget {
   @override
@@ -40,7 +41,7 @@ class _AccountPageState extends State<AccountPage> {
     return SingleChildScrollView(
       child: Container(
         decoration: BoxDecoration(
-            gradient: LinearGradient(colors: [Colors.white30,Colors.white12,Colors.black12])),
+            gradient: LinearGradient(colors: [Colors.grey,Colors.white12,Colors.black12])),
         padding: EdgeInsets.only(left: 15, right: 15),
         width: MediaQuery.of(context).size.width,
         child: Column(
@@ -98,10 +99,21 @@ class _AccountPageState extends State<AccountPage> {
               crossAxisSpacing: 20,
               padding: EdgeInsets.all(15),
               itemBuilder: (context, index) {
-                return ClipRRect(
-                    borderRadius: BorderRadius.circular(9),
-                    child: Image(image: CacheImage(images[index])));
-              },
+                return InkWell(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=> ViewWallpaper(image: images[index])));
+                  },
+                  child: Hero(
+                    tag: images[index],
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.circular(9),
+                        child: CachedNetworkImage(
+                          placeholder: (context,url)=> Image.asset('assets/placeholder.jpg'),
+                          imageUrl: images[index],
+                        ),
+                    ),
+                  ),
+                );},
             )
           ],
         ),
@@ -109,3 +121,4 @@ class _AccountPageState extends State<AccountPage> {
     );
   }
 }
+//Image(image: CacheImage(images[index])));
