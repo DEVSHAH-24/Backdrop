@@ -4,7 +4,10 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:wallie/rounded_button.dart';
 import 'package:cache_image/cache_image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:wallie/screens/add_wallpaper.dart';
 import 'package:wallie/screens/view_wallpaper.dart';
+import 'package:file_picker/file_picker.dart';
+
 
 class AccountPage extends StatefulWidget {
   @override
@@ -44,7 +47,7 @@ class _AccountPageState extends State<AccountPage> {
             gradient: LinearGradient(colors: [Colors.grey,Colors.white12,Colors.black12])),
         padding: EdgeInsets.only(left: 15, right: 15),
         width: MediaQuery.of(context).size.width,
-        child: Column(
+        child: _user!=null ? Column(
           children: <Widget>[
             ClipRRect(
               borderRadius: BorderRadius.circular(15),
@@ -84,7 +87,9 @@ class _AccountPageState extends State<AccountPage> {
                   Text("My uploaded wallpapers"),
                   IconButton(
                     icon: Icon(Icons.add_to_photos),
-                    onPressed: (){},
+                    onPressed: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => AddWallpaper(),fullscreenDialog: true ));
+                    },
                   )
                 ],
               ),
@@ -116,7 +121,7 @@ class _AccountPageState extends State<AccountPage> {
                 );},
             )
           ],
-        ),
+        ): LinearProgressIndicator(backgroundColor: Colors.blue[200],)
       ),
     );
   }
