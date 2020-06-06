@@ -20,13 +20,15 @@ class _AddWallpaperState extends State<AddWallpaper> {
       body: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Container(
-          height: MediaQuery.of(context).size.height,
-          //width: MediaQuery.of(context).size.width,
-          child: Row(
+         // height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: Column(
             children: <Widget>[
               InkWell(
-                onTap: (){},
-                child: Image.asset('assets/placeholder.jpg'),
+                onTap: (){
+                  _loadImage();
+                },
+                child: _image!= null ? Image.file(_image): Image.asset('assets/placeholder.jpg'),
 
               ),
               SizedBox(
@@ -42,9 +44,10 @@ class _AddWallpaperState extends State<AddWallpaper> {
     );
   }
   void _loadImage() async{
-    var image = ImagePicker.pickImage(source: ImageSource.gallery);
+    final picker = ImagePicker();
+    var image = await picker.getImage(source: ImageSource.gallery);
     setState(() {
-      _image = image;
+      _image = File(image.path);
     });
   }
 }
