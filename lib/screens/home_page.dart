@@ -3,7 +3,6 @@ import 'package:wallie/screens/account.dart';
 import 'package:wallie/screens/explore.dart';
 import 'package:wallie/screens/favorites.dart';
 import 'package:wallie/screens/login_screen.dart';
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
