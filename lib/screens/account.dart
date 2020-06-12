@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:wallie/config/configuration.dart';
 import 'package:wallie/rounded_button.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:wallie/screens/add_wallpaper.dart';
@@ -12,13 +15,8 @@ class AccountPage extends StatefulWidget {
 }
 
 class _AccountPageState extends State<AccountPage> {
-  List images = [
-    ("https://images.pexels.com/photos/3584345/pexels-photo-3584345.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"),
-    ("https://images.unsplash.com/photo-1586294839852-650d52bb6923?ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80"),
-    ("https://images.pexels.com/photos/1742370/pexels-photo-1742370.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"),
-    ("https://images.pexels.com/photos/355952/pexels-photo-355952.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"),
-    ("https://images.pexels.com/photos/2740956/pexels-photo-2740956.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"),
-  ];
+  final Firestore _db = Firestore.instance;
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseUser _user;
 
@@ -46,7 +44,7 @@ class _AccountPageState extends State<AccountPage> {
           padding: EdgeInsets.only(left: 15, right: 15),
           width: MediaQuery.of(context).size.width,
           child: _user != null
-              ? Column(
+              ? Stack(
                   children: <Widget>[
                     ClipRRect(
                       borderRadius: BorderRadius.circular(15),
@@ -90,16 +88,80 @@ class _AccountPageState extends State<AccountPage> {
                             icon: Icon(Icons.add_to_photos),
                             onPressed: () {
                               Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => AddWallpaper(),
-                                      fullscreenDialog: true));
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => AddWallpaper(),
+                                    fullscreenDialog: true),
+                              );
                             },
                           )
                         ],
                       ),
                     ),
-                    StaggeredGridView.countBuilder(
+                    StreamBuilder(
+                        stream: _db
+                            .collection('Wallpapers')
+                            .where('uploaded_by', isEqualTo: _user.uid)
+                            .orderBy("date", descending: true)
+                            .snapshots(),
+                        builder: (ctx, AsyncSnapshot<QuerySnapshot> snapshot) {
+                          if (snapshot.hasData) {
+                            return StaggeredGridView.countBuilder(
+                              crossAxisCount: 2,
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              staggeredTileBuilder: (int index) =>
+                                  StaggeredTile.fit(1),
+                              itemCount: snapshot.data.documents.length,
+                              mainAxisSpacing: 15,
+                              crossAxisSpacing: 20,
+                              padding: EdgeInsets.all(15),
+                              itemBuilder: (context, index) {
+                                return InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      (context),
+                                      MaterialPageRoute(
+                                        builder: (context) {
+                                          return ViewWallpaper(
+                                            image: snapshot.data
+                                                .documents[index].data["url"],
+                                          );
+                                        },
+                                      ),
+                                    );
+                                  },
+                                  child: Hero(
+                                    tag: snapshot
+                                        .data.documents[index].data["url"],
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: CachedNetworkImage(
+                                          imageUrl: snapshot.data
+                                              .documents[index].data['url'],
+                                              ),
+                                    ),
+                                  ),
+                  
+                                );
+                              },
+                            );
+                          }
+                          return SpinKitDualRing(
+                            color: primaryColor,
+                            size: 50,
+                          );
+                        }),
+                  ],
+                )
+              : LinearProgressIndicator(
+                  backgroundColor: Colors.blue[200],
+                )),
+    );
+  }
+}
+//Image(image: CacheImage(images[index])));
+/* StaggeredGridView.countBuilder(
                       crossAxisCount: 2,
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
@@ -130,13 +192,4 @@ class _AccountPageState extends State<AccountPage> {
                           ),
                         );
                       },
-                    )
-                  ],
-                )
-              : LinearProgressIndicator(
-                  backgroundColor: Colors.blue[200],
-                )),
-    );
-  }
-}
-//Image(image: CacheImage(images[index])));
+                    )*/

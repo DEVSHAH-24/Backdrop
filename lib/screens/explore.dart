@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -48,42 +49,45 @@ class _ExplorePageState extends State<ExplorePage> {
               alignment: Alignment.centerLeft,
             ),
             StreamBuilder(
-              stream: _db.collection("Wallpapers").orderBy("date",descending: true).snapshots(),
-              builder: (ctx, AsyncSnapshot<QuerySnapshot> snapshot){
-                if(snapshot.hasData){
-                    StaggeredGridView.countBuilder(
-              crossAxisCount: 2,
-              shrinkWrap: true,
-              physics: NeverScrollableScrollPhysics(),
-              staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
-              itemCount: snapshot.data.documents.length,
-              mainAxisSpacing: 15,
-              crossAxisSpacing: 20,
-              padding: EdgeInsets.all(15),
-              itemBuilder: (context, index) {
-                return InkWell(
-                  onTap: () {
-                    Navigator.push((context),
-                        MaterialPageRoute(builder: (context) {
-                      return ViewWallpaper(
-                        image: snapshot.data.documents[index].data["url"],
-                      );
-                    }));
-                  },
-                );
-              },
-            );
-                }else{
-                    return SpinKitCubeGrid(
-                      color: primaryColor,
-                      size: 60,
-
-                      
+                stream: _db
+                    .collection('Wallpapers')
+                    .orderBy("date", descending: true)
+                    .snapshots(),
+                builder: (ctx, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasData) {
+                     return StaggeredGridView.countBuilder(
+                      crossAxisCount: 2,
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      staggeredTileBuilder: (int index) => StaggeredTile.fit(1),
+                      itemCount: snapshot.data.documents.length,
+                      mainAxisSpacing: 15,
+                      crossAxisSpacing: 20,
+                      padding: EdgeInsets.all(15),
+                      itemBuilder: (context, index) {
+                        return InkWell(
+                            onTap: () {
+                              Navigator.push((context),
+                                  MaterialPageRoute(builder: (context) {
+                                return ViewWallpaper(
+                                  image: snapshot
+                                      .data.documents[index].data["url"],
+                                );
+                              }));
+                            },
+                            child: Hero(
+                              tag: snapshot.data.documents[index].data["url"],
+                              child: ClipRRect(borderRadius: BorderRadius.circular(12),child: CachedNetworkImage(imageUrl: snapshot.data.documents[index].data['url']),)
+                            ));
+                      },
                     );
-                }
-              }
-            ),
-            
+                  } 
+                    return SpinKitDualRing(
+                      color: primaryColor,
+                      size: 50,
+                    );
+                  
+                }),
           ],
         ),
       ),
