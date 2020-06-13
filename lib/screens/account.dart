@@ -44,7 +44,7 @@ class _AccountPageState extends State<AccountPage> {
           padding: EdgeInsets.only(left: 15, right: 15),
           width: MediaQuery.of(context).size.width,
           child: _user != null
-              ? Stack(
+              ? Column(
                   children: <Widget>[
                     ClipRRect(
                       borderRadius: BorderRadius.circular(15),
@@ -117,33 +117,56 @@ class _AccountPageState extends State<AccountPage> {
                               crossAxisSpacing: 20,
                               padding: EdgeInsets.all(15),
                               itemBuilder: (context, index) {
-                                return InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                      (context),
-                                      MaterialPageRoute(
-                                        builder: (context) {
-                                          return ViewWallpaper(
-                                            image: snapshot.data
-                                                .documents[index].data["url"],
-                                          );
-                                        },
-                                      ),
-                                    );
-                                  },
-                                  child: Hero(
-                                    tag: snapshot
-                                        .data.documents[index].data["url"],
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(12),
-                                      child: CachedNetworkImage(
+                                return Stack(children: <Widget>[
+                                  InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                        (context),
+                                        MaterialPageRoute(
+                                          builder: (context) {
+                                            return ViewWallpaper(
+                                              image: snapshot.data
+                                                  .documents[index].data["url"],
+                                            );
+                                          },
+                                        ),
+                                      );
+                                    },
+                                    child: Hero(
+                                      tag: snapshot
+                                          .data.documents[index].data["url"],
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(12),
+                                        child: CachedNetworkImage(
                                           imageUrl: snapshot.data
                                               .documents[index].data['url'],
-                                              ),
+                                        ),
+                                      ),
                                     ),
                                   ),
-                  
-                                );
+                                  IconButton(
+                                    alignment: Alignment.topRight,
+                                    color: Colors.red,
+                                      icon: Icon(Icons.delete), onPressed: (){
+                                      return showDialog(context: context, builder: (ctx){
+                                        return AlertDialog(shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                                        ),
+                                        title: Text('Confirm'),
+                                        content: Text('Are you sure you want to delete this image?'),
+                                        elevation: 50,
+                                        actions: <Widget>[
+                                            FlatButton(
+                                              onPressed: (){},
+                                              color: Colors.red,
+                                              
+                                              child: Text('Delete'),
+                                            ),
+                                            FlatButton(onPressed: (){},child: Text('Cancel'))
+                                        ],);
+                                      });
+                                      })
+                                ]);
                               },
                             );
                           }
@@ -152,6 +175,9 @@ class _AccountPageState extends State<AccountPage> {
                             size: 50,
                           );
                         }),
+                    /*  IconButton(onPressed: (){
+                          _db.collection("Wallpapers").document(snapshot.data.documents(snapshot.data.documents[index]).delete);
+                        }  , icon: Icon(Icons.delete),),*/
                   ],
                 )
               : LinearProgressIndicator(
