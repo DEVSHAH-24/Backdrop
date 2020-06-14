@@ -35,6 +35,8 @@ dependencies:
   cached_network_image: ^2.2.0+1
   file_picker: ^1.10.0
   image_picker: ^0.6.7+1
+  firebase_messaging: ^6.0.16
+
   firebase_ml_vision: ^0.9.3+8
 
 

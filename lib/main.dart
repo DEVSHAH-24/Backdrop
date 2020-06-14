@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:wallie/screens/home_page.dart';
 import 'package:wallie/screens/login_screen.dart';
@@ -28,7 +29,28 @@ class MainApp extends StatefulWidget {
 }
 
 class _MainAppState extends State<MainApp> {
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  @override
+  void initState() {
+    _firebaseMessaging.configure(
+      onMessage: (Map <String ,dynamic> message) async{
+      print("onMessage: $message");
+      },
+      onLaunch: (Map <String,dynamic> message) async {
+        print("onMessage: $message");
+      },
+      onResume: (Map <String,dynamic> message) async {
+      print("onMessage: $message");
+    },
+    );
+
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(

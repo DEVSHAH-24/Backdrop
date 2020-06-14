@@ -157,12 +157,17 @@ class _AccountPageState extends State<AccountPage> {
                                         elevation: 50,
                                         actions: <Widget>[
                                             FlatButton(
-                                              onPressed: (){},
+                                              onPressed: (){
+                                                setState(() {
+                                                  _db.collection('Wallpapers').document(snapshot.data.documents[index].documentID).delete();
+                                                });
+                                                Navigator.pop(context);
+                                              },
                                               color: Colors.red,
                                               
                                               child: Text('Delete'),
                                             ),
-                                            FlatButton(onPressed: (){},child: Text('Cancel'))
+                                            FlatButton(onPressed: (){Navigator.pop(context);},child: Text('Cancel'))
                                         ],);
                                       });
                                       })
