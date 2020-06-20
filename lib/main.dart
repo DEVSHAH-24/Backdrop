@@ -36,20 +36,59 @@ class _MainAppState extends State<MainApp> {
   @override
   void initState() {
     _firebaseMessaging.configure(
-      onMessage: (Map <String ,dynamic> message) async{
-      print("onMessage: $message");
-      },
-      onLaunch: (Map <String,dynamic> message) async {
+      onMessage: (Map <String, dynamic> message) async {
         print("onMessage: $message");
+        String title = message["notification"]["title"] ?? "";
+        String body = message["notification"]["body"] ?? "";
+        print(title);
+        print(body);
+        displayDialog(
+          title: title,
+          body: body,
+        );
       },
-      onResume: (Map <String,dynamic> message) async {
-      print("onMessage: $message");
-    },
+      onLaunch: (Map <String, dynamic> message) async {
+        print("onMessage: $message");
+        String title = message["notification"]["title"] ?? "";
+        String body = message["notification"]["body"] ?? "";
+        print(title);
+        print(body);
+        displayDialog(
+          title: title,
+          body: body,
+        );
+      },
+      onResume: (Map <String, dynamic> message) async {
+        print("onMessage: $message");
+        String title = message["notification"]["title"] ?? "";
+        String body = message["notification"]["body"] ?? "";
+        print(title);
+        print(body);
+        displayDialog(
+          title: title,
+          body: body,
+        );
+      },
     );
-
+    _firebaseMessaging.subscribeToTopic("promotion");
 
     super.initState();
   }
+
+  Future displayDialog({String title, String body}) {
+    return showDialog(context: context, builder: (ctx) {
+      return AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50),),
+        title: Text(title),
+        content: Text(body),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('Dismiss'), onPressed: () => Navigator.pop(context),),
+        ],
+      );
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -68,4 +107,5 @@ class _MainAppState extends State<MainApp> {
       },
     );
   }
+
 }

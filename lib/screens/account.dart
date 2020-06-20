@@ -157,7 +157,7 @@ class _AccountPageState extends State<AccountPage> {
                                         elevation: 50,
                                         actions: <Widget>[
                                             FlatButton(
-                                              onPressed: (){
+                                              onPressed: (){  
                                                 setState(() {
                                                   _db.collection('Wallpapers').document(snapshot.data.documents[index].documentID).delete();
                                                 });
