@@ -13,7 +13,7 @@ class ExplorePage extends StatefulWidget {
 
 class _ExplorePageState extends State<ExplorePage> {
   final Firestore _db = Firestore.instance;
-  final spinkit = SpinKitFadingCircle(
+  final spinKit = SpinKitFadingCircle(
     itemBuilder: (BuildContext context, int index) {
       return DecoratedBox(
         decoration: BoxDecoration(
@@ -70,8 +70,8 @@ class _ExplorePageState extends State<ExplorePage> {
                               Navigator.push((context),
                                   MaterialPageRoute(builder: (context) {
                                 return ViewWallpaper(
-                                  image: snapshot
-                                      .data.documents[index].data["url"],
+                                  data: snapshot
+                                      .data.documents[index],
                                 );
                               }));
                             },

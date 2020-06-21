@@ -125,8 +125,8 @@ class _AccountPageState extends State<AccountPage> {
                                         MaterialPageRoute(
                                           builder: (context) {
                                             return ViewWallpaper(
-                                              image: snapshot.data
-                                                  .documents[index].data["url"],
+                                              data: snapshot.data
+                                                  .documents[index],
                                             );
                                           },
                                         ),

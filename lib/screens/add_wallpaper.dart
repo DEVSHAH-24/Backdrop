@@ -94,17 +94,18 @@ class _AddWallpaperState extends State<AddWallpaper> {
     var image = await ImagePicker.pickImage(source: ImageSource.gallery);
     final FirebaseVisionImage visionImage = FirebaseVisionImage.fromFile(image);
 
-    List<ImageLabel> labels = await labeler.processImage(visionImage);
+    final List<ImageLabel> labels = await labeler.processImage(visionImage);
 
-    List labelsInString = [];
-    for (var l in labels) {
-      labelsInString.add(l.text);
-    }
+    List labelsInString;
+
 
     setState(() {
-      detectedLabels = labels;
+       detectedLabels = labels;
       _image = image;
     });
+    for (ImageLabel l in labels) {
+      labelsInString.add(l.text);
+    }
   }
 
   void _uploadWallpaper() async {
@@ -132,7 +133,7 @@ class _AddWallpaperState extends State<AddWallpaper> {
              "url": url,
              "date": DateTime.now(),
              "uploaded_by": uid,
-             "tags": labelsInString
+             "tags": labelsInString,
            }
            );
            Navigator.of(context).pop();
