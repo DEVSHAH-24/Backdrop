@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: "productsans",
         brightness: Brightness.dark,
-        primaryColor: primaryColor,
+        primaryColor: Colors.black,
       ),
       debugShowCheckedModeBanner: false,
       home: MainApp(),

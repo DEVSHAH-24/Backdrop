@@ -1,9 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
+import 'package:share/share.dart';
+import 'package:wallie/config/configuration.dart';
 
 class ViewWallpaper extends StatefulWidget {
-
   final DocumentSnapshot data;
   ViewWallpaper({this.data});
   @override
@@ -11,20 +15,15 @@ class ViewWallpaper extends StatefulWidget {
 }
 
 class _ViewWallpaperState extends State<ViewWallpaper> {
-//  List images = [
-//    ("https://images.pexels.com/photos/3584345/pexels-photo-3584345.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"),
-//    ("https://images.unsplash.com/photo-1586294839852-650d52bb6923?ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80"),
-//    ("https://images.pexels.com/photos/1742370/pexels-photo-1742370.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"),
-//    ("https://images.pexels.com/photos/355952/pexels-photo-355952.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"),
-//    ("https://images.pexels.com/photos/2740956/pexels-photo-2740956.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500"),
-//  ];
+  final Firestore _db = Firestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  Icon favIcon = Icon(Icons.favorite_border);
   @override
   Widget build(BuildContext context) {
-    List <dynamic> tags = widget.data["tags"].toList();
+    List<dynamic> tags = widget.data["tags"].toList();
     return Scaffold(
       body: SingleChildScrollView(
         child: Container(
-
           width: MediaQuery.of(context).size.width,
           child: Column(
             children: <Widget>[
@@ -40,18 +39,93 @@ class _ViewWallpaperState extends State<ViewWallpaper> {
               ),
               Container(
                 child: Wrap(
-                  children: tags.map((tag){
+                  children: tags.map((tag) {
                     return Chip(
                       label: Text(tag),
-
                     );
                   }).toList(),
                 ),
-              )
+              ),
+              Container(
+                  child: Wrap(
+                runSpacing: 10,
+                spacing: 10,
+                children: [
+                  RaisedButton.icon(
+                    icon: Icon(Icons.image),
+                    label: Text('Get Wallpaper'),
+                    onPressed: launchURL,
+                  ),
+                  RaisedButton.icon(
+                    icon: Icon(Icons.share),
+                    label: Text('Share'),
+                    onPressed: createDynamicLink,
+                  ),
+                  RaisedButton.icon(
+                    icon: favIcon,
+                    label: Text(""),
+                    onPressed: addToFavorite,
+                  ),
+                ],
+              ))
             ],
           ),
         ),
       ),
     );
+  }
+
+  void launchURL() async {
+    try {
+      await launch(widget.data["url"],
+          option: CustomTabsOption(
+            animation: CustomTabsAnimation.fade(),
+            toolbarColor: primaryColor,
+          ));
+    } catch (e) {}
+  }
+
+  void addToFavorite() async {
+    setState(() {
+      favIcon = Icon(
+        Icons.favorite,
+        color: Colors.red,
+      );
+    });
+
+    FirebaseUser user = await _auth.currentUser();
+    String uid = user.uid;
+    return _db
+        .collection("users")
+        .document(uid)
+        .collection("favorites")
+        .document(widget.data.documentID)
+        .setData(
+          widget.data.data,
+        );
+  }
+
+  void createDynamicLink() async {
+    DynamicLinkParameters dynamicLinkParameters = DynamicLinkParameters(
+      link: Uri.parse(widget.data.documentID),
+      uriPrefix: "https://ds24.page.link",
+      androidParameters: AndroidParameters(
+        packageName: 'com.ds24.wallie',
+        minimumVersion: 0,
+      ),
+      iosParameters: IosParameters(
+        minimumVersion: "0",
+        bundleId: 'com.ds24.wallie',
+      ),
+      socialMetaTagParameters: SocialMetaTagParameters(
+          title: "WallyApp",
+          description: "Explore the finesse of wallpapers",
+          imageUrl: Uri.parse(widget.data['url'])),
+    );
+
+    Uri uri = await dynamicLinkParameters.buildUrl();
+    String url = uri.toString();
+    print(url);
+    Share.share(url);
   }
 }

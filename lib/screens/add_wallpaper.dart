@@ -133,10 +133,10 @@ class _AddWallpaperState extends State<AddWallpaper> {
              "url": url,
              "date": DateTime.now(),
              "uploaded_by": uid,
-             "tags": labelsInString,
+             "tags": labelsInString.toList(),
            }
            );
-           Navigator.of(context).pop();
+           Navigator.pop(context);
 
           });
           setState(() {
